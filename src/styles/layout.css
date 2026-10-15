@@ -81,13 +81,32 @@
 
 .sidebar-scrim { display: none; }
 
-.main { margin-left: var(--sidebar-w); min-height: 100vh; display: flex; flex-direction: column; }
+.main {
+  margin-left: var(--sidebar-w);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Push main content & header right when sidebar expands on desktop */
+@media (min-width: 992px) {
+  .app-shell:has(.sidebar:hover) .main,
+  .app-shell:has(.sidebar.is-open) .main {
+    margin-left: var(--sidebar-w-open);
+  }
+  .app-shell:has(.sidebar:hover) .app-header,
+  .app-shell:has(.sidebar.is-open) .app-header {
+    left: var(--sidebar-w-open);
+  }
+}
 
 .app-header {
   position: fixed; top: 0; right: 0; left: var(--sidebar-w);
   height: var(--header-h); z-index: 1030;
   background: #fff; border-bottom: 1px solid #f0f0f0;
   display: flex; align-items: center; gap: 20px; padding: 0 28px;
+  transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .app-header__ctx { min-width: 0; line-height: 1.35; }
 .app-header__ctx .hospital { font-size: 15px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -141,10 +160,14 @@
 @media (max-width: 991px) {
   .sidebar { transform: translateX(-100%); width: var(--sidebar-w-open); }
   .sidebar.is-open { transform: none; }
-  .sidebar .sidebar__brand-text, .sidebar .sidebar__link span.label, .sidebar .sidebar__badge { opacity: 1; }
+  .sidebar .sidebar__brand-text,
+  .sidebar .sidebar__link span.label,
+  .sidebar .sidebar__badge {
+    opacity: 1; transform: none; transition: none; transition-delay: 0s;
+  }
   .sidebar-scrim { display: block; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.45); z-index: 1035; }
-  .main { margin-left: 0; }
-  .app-header { left: 0; padding: 0 16px; gap: 10px; }
+  .main { margin-left: 0; transition: none; }
+  .app-header { left: 0; padding: 0 16px; gap: 10px; transition: none; }
   .menu-toggle { display: grid; }
   .app-header__search { display: none; }
   .user-chip .who { display: none; }
